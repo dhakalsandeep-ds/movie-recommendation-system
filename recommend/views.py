@@ -402,8 +402,9 @@ def cosine_recommend(request):
     print("cosine _recommend ....................")
     title = request.GET.get('q',None)
     print("*************title**********")
-    print(title)
+    print("title is .......................",title)
     if title == None: 
+        print("insdie ....",)
         suggestions = recommend_movies(request)
 
 
@@ -411,9 +412,11 @@ def cosine_recommend(request):
         user = User.objects.get(id=request.user.id)
         context = {
             'user': user,
-            'movie_list': suggestions
+            'movie_list': suggestions,
+            'find':True,
         }
         print("request user >>>>>>>>>>>>>>>>>>", request.user)
+
         return render(request, 'recommend/recommend.html', context)
 
     # Query the Movie model to get the movie object by title
@@ -424,12 +427,13 @@ def cosine_recommend(request):
         find = False
     else:
         recommendations = movie.get_recommendations()
+        print("recommendations >>>>>>>>>>>>>>", recommendations)
         find = True
         # Get recommendations using the get_recommendations() method
     # recommendations = movie.get_recommendations()
     print("i am here...............")
     # print(recommendations)
-    context = {'movie_list': recommendations, find:find}
+    context = {'movie_list': recommendations, 'find':find}
     print("request user .>>>>>>>>>>>>>>>>>" ,request.user)
     return render(request, 'recommend/recommend.html', context)
     
