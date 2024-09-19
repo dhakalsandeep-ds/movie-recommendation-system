@@ -1,0 +1,62 @@
+{% extends 'recommend/base.html'%}
+{% block title %}Profile{% endblock %}
+{% block body %}
+<div class="container">
+ <div class="row">
+   <div class="col-md-offset-6 col-sm-offset-5">
+    <h3> profile </h3>
+   </div>
+ 
+   {% if error_message %}
+       <p><strong>{{ error_message }}</strong></p>
+   {% endif %}
+ </div>
+    <div class="row">
+        <div class="col-sm-12 col-md-9 col-md-offset-2">
+        
+                  
+                    <form class="" role="form" action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label class="" for="username">
+                                Username: 
+                            </label>
+                          
+                                <input class="form-control" id="username" name="username" value={{request.user.username}}>
+                           
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="email">
+                                Email:
+                            </label>
+                          
+                                <input class="form-control" id="email" name="email" type="email" value={{request.user.email}} >
+                           
+                        </div>
+                        <div class="form-group">
+                            <label class="" for="id_password">
+                                Password:
+                            </label>
+                            
+                                <input class="form-control" 
+                                style="background-color: white;"
+                                id="id_password" maxlength="30" name="password" type="password">
+                          
+                        </div>
+                       
+                        <div class="form-group">   
+                                <button type="submit" class="btn btn-success">change</button>
+                        </div>  
+                        
+                    </form>
+               
+           
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

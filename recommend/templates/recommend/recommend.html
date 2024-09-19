@@ -1,0 +1,66 @@
+{% extends 'recommend/base.html'%}
+{% block title %}Recommendations for {{request.user.username}}{% endblock %}
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+    
+        <form class="col-xs-5 col-xs-offset-3 " method="get" action=''>
+          <input value="{{ request.GET.q }}" class="form-control input-lg" autocomplete="off" id="search-box" name="q"
+            placeholder="search movie to get similar movie recommended" hx-get="/auto/" 
+           
+            hx-trigger="keyup changed delay:900ms"
+            hx-target="#search-results-container" hx-swap="innerHTML">
+  
+            <input type="hidden" type="text" name="p" value="1">
+            
+        </form>
+    
+        <!-- <p class="col-xs-4" >
+          
+            <a href="{% url 'recommend' %}" class="btn"><button style="color:#fff;background-color:#4CAF50;padding:10px">Get
+                Movie Recommendation</button></a>
+            
+          
+        </p> -->
+  
+      
+      
+    </div>
+    <div class="row">
+        <div class="col-xs-5 col-xs-offset-3 ">
+          <div id="search-results-container">
+            <!-- Search results will be updated here -->
+          </div>
+        </div>
+      </div>
+	<h2>Recommendations for you</h2>
+</div>
+<hr>
+<br>
+
+	<div class="container-fluid">
+
+    <!-- Movie list -->
+    <div class="row">
+            {% if movie_list and find %}
+                {% for movie, score in movie_list %}
+                    <div class="col-sm-4 col-md-2 ">
+                        <div class="thumbnail" style="border-radius: 22px 22px 22px 22px;
+                        background-color: gainsboro;border:none;">
+                            <center><h4 style="color:black;">{{movie.title }} | {{ score}} </h4></center>
+                            <a href="{% url 'detail' movie.id %}">
+                                <img src="{{ movie.movie_logo.url}}" class="img-responsive" style="border-radius: 22px 22px 22px 22px;">
+                            </a>
+                           <center><h5 style="color:black;">{{movie.genre}}</h5></center>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% else %}
+              <center>  <h2 color="red"> no movies similar to it to recommend</h3></center>
+            {% endif %}
+        </div>
+
+</div>
+
+{% endblock %}

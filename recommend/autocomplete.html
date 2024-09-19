@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Movies</title>
+    <script src="https://unpkg.com/htmx.org@1.8.4/dist/htmx.min.js"></script>
+    <style>
+        /* Styles for input and search results */
+        #search-box {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            position: relative;
+            z-index: 1; /* Ensure input is on top */
+        }
+        #search-results-container {
+            position: absolute;
+            top: calc(100% + 5px); /* Position below the input box with a small gap */
+            width: 300px; /* Match width to input */
+            border: 1px solid #ccc;
+            background-color: #fff;
+            z-index: 2; /* Higher z-index to appear above other content */
+            display: none; /* Initially hidden */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center horizontally */
+        }
+        .movie {
+            padding: 10px;
+            cursor: pointer;
+            white-space: nowrap; /* Prevent text from wrapping */
+        }
+        .movie:hover,
+        .movie.selected {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search Movies</h1>
+    <div style="position: relative; display: inline-block;">
+        <input autocomplete="off" id="search-box" name="q" placeholder="Search..." 
+               hx-get="/search/" hx-trigger="keyup changed delay:900ms" 
+               hx-target="#search-results-container" hx-swap="innerHTML">
+        
+        <div id="search-results-container">
+            <!-- Search results will be updated here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('click', function(event) {
+            if (!event.target.classList.contains('movie')) return;
+
+            document.getElementById('search-box').value = event.target.textContent.trim();
+            document.getElementById('search-results-container').style.display = 'none';
+        });
+
+        document.addEventListener('keydown', function(event) {
+            const searchBox = document.getElementById('search-box');
+            const resultsContainer = document.getElementById('search-results-container');
+            const results = resultsContainer.querySelectorAll('.movie');
+            let selectedIndex = -1;
+
+            if (results.length > 0) {
+                // Find the currently selected item
+                results.forEach((result, index) => {
+                    if (result.classList.contains('selected')) {
+                        selectedIndex = index;
+                    }
+                });
+
+                if (event.key === 'ArrowDown') {
+                    // Move selection down
+                    if (selectedIndex < results.length - 1) {
+                        if (selectedIndex > -1) {
+                            results[selectedIndex].classList.remove('selected');
+                        }
+                        results[selectedIndex + 1].classList.add('selected');
+                        searchBox.value = results[selectedIndex + 1].textContent.trim();
+                    }
+                } else if (event.key === 'ArrowUp') {
+                    // Move selection up
+                    if (selectedIndex > 0) {
+                        results[selectedIndex].classList.remove('selected');
+                        results[selectedIndex - 1].classList.add('selected');
+                        searchBox.value = results[selectedIndex - 1].textContent.trim();
+                    }
+                } else if (event.key === 'Enter') {
+                    // Select the current item
+                    if (selectedIndex > -1) {
+                        searchBox.value = results[selectedIndex].textContent.trim();
+                        resultsContainer.style.display = 'none';
+                    }
+                }
+            }
+        });
+
+        // Show the results container when there are results
+        document.getElementById('search-box').addEventListener('input', function() {
+            const resultsContainer = document.getElementById('search-results-container');
+            if (this.value.trim() !== '') {
+                resultsContainer.style.display = 'block';
+            } else {
+                resultsContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

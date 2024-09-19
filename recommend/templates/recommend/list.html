@@ -1,0 +1,84 @@
+{% extends 'recommend/base.html'%}
+{% block body %}
+<!-- 
+{% if not request.user.is_authenticated %}
+<br>
+{% else %}
+<center style="color:#fff">
+  <h2>Welcome {{user.username}}!!</h2>
+</center>
+{% endif %} -->
+
+
+
+
+
+<div class="container-fluid">
+  <div class="row">
+    
+      <form class="col-xs-5 col-xs-offset-3 " method="get" action=''>
+        <input value="{{ request.GET.q }}" class="form-control input-lg" autocomplete="off" id="search-box" name="q"
+          placeholder="Search..." hx-get="/search/" 
+         
+          hx-trigger="keyup changed delay:900ms"
+          hx-target="#search-results-container" hx-swap="innerHTML">
+
+          <input type="hidden" type="text" name="p" value="1">
+          
+      </form>
+  
+      <!-- <p class="col-xs-4" >
+        
+          <a href="{% url 'recommend' %}" class="btn"><button style="color:#fff;background-color:#4CAF50;padding:10px">Get
+              Movie Recommendation</button></a>
+          
+        
+      </p> -->
+
+    
+    
+  </div>
+  <div class="row">
+    <div class="col-xs-5 col-xs-offset-3 ">
+      <div id="search-results-container">
+        <!-- Search results will be updated here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- <p style="text-align:left;">
+    <span style="float:right;">
+      <a href="{% url 'recommend' %}" class="btn"><button style="color:#fff;background-color:#4CAF50;padding:10px">Get
+          Movie Recommendation</button></a>
+      <h2>Movie List</h2>
+    </span>
+  </p> -->
+  <hr>
+  <br>
+
+  <!-- Movie list -->
+  <div class="row">
+   
+    {% if movies %}
+     
+    {% for movie in movies %}
+    <div class="col-sm-4 col-md-2">
+      <div class="thumbnail" style="border-radius: 22px 22px 22px 22px; background-color: gainsboro;border:1px solid white">
+        <center>
+          <h5 style="color:black;">{{movie.title}}</h5>
+        </center>
+        <a href="{% url 'detail' movie.id %}">
+          <img src="{{ movie.movie_logo.url}}" class="img-responsive" style="border-radius: 22px 22px 22px 22px;">
+        </a>
+        <center><h5 style="color:black;">{{movie.genre}}</h5></center>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+</div>
+
+{% include 'recommend/pagination.html' with page_number=page_number  page_range=page_range num_pages=num_pages  %}
+
+{% endblock %}

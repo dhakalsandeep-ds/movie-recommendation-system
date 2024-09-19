@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.pagination {
+  display: flex;
+  margin:auto;
+  width:200px;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+}
+
+.pagination a:hover:not(.active) {
+  background-color: #ddd;
+  border-radius: 5px;
+}
+</style>
+</head>
+<body>
+
+
+
+<!-- <div class="pagination">
+    
+  <a href="#" >&laquo; {{ p }}</a>
+  <a href="#" class="{% if p == 1 %} active {% endif %}" >1</a>
+  <a href="#" >2</a>
+  <a href="#">3</a>
+
+  <a href="#">&raquo;</a>
+</div> -->
+
+<div class="pagination">
+    {% if page_number > 1 %}
+    <a href="?p={{ page_number|add:"-1" }}{% if query %}&q={{ query }}{% endif %}">&laquo;</a>
+  {% endif %}
+  {% for num in page_range %}
+  <a href="?p={{ num }}{% if query %}&q={{ query }}{% endif %}" class="{% if num == page_number %}active{% endif %}">{{ num }}</a>
+{% endfor %}
+
+{% if page_number < num_pages %}
+  <a href="?p={{ page_number|add:"1" }}{% if query %}&q={{ query }}{% endif %}">&raquo;</a>
+{% endif %}
+  </div>
+
+
+</body>
+</html>
